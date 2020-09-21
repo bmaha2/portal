@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import NewSingle from "./NewSingle";
+import Error from './Error'
+
 
 class News extends Component {
   constructor(props) {
@@ -7,6 +9,7 @@ class News extends Component {
     this.state = {
         
       news: [],
+      error: false,
     };
   }
 
@@ -21,13 +24,21 @@ class News extends Component {
           news: data.articles,
         });
       })
-      .catch(error => console.log(error))
+      .catch(error=>{
+        this.setState({
+            error: true
+        })
+    })
   }
 
   renderItems() {
+    if(!this.state.error) {
     return this.state.news.map((item) => (
       <NewSingle key={item.url} item={item} />
     ));
+    } else {
+      return <Error />
+    }
   }
 
   render() {
